@@ -6,7 +6,7 @@
 /*   By: osarsar <osarsar@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/07 03:58:12 by osarsar           #+#    #+#             */
-/*   Updated: 2023/08/22 20:04:19 by osarsar          ###   ########.fr       */
+/*   Updated: 2023/08/25 04:51:42 by osarsar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,30 +37,28 @@ void	*action(void *philo)
 	t_philo	*philosopher;
 
 	philosopher = (t_philo *)philo;
-	philosopher->start_eat = time_now();
-	philosopher->start = time_now();
 	philosopher->data->death = 0;
 	philosopher->time_ate = 0;
-	// if ((philosopher->tid % 2) == 0)
-	// 	usleep(200);
+	if ((philosopher->tid % 2) == 0)
+		usleep(100);
 	while (1)
 	{
-			pthread_mutex_lock(&philosopher->fork_right);
-			printf_action(philosopher, "has taken a fork_right");
+			pthread_mutex_lock(&philosopher[philosopher->tid - 1].fork);
+			printf_action(philosopher, "has taken a fork");
 			if(philosopher->data->nbr_philo == 1)
-				usleep((philosopher->data->time_to_die * 1000) + 1000);
-			pthread_mutex_lock(&philosopher->fork_left);
-			printf_action(philosopher, "has taken a fork_left");
-			philosopher->start_eat = time_now();
+				ft_usleep((philosopher->data->time_to_die * 1000) + 1000);
+			pthread_mutex_lock(&philosopher[philosopher->tid % philosopher->data->nbr_philo].fork);
+			printf_action(philosopher, "has taken a fork");
 			printf_action(philosopher, "is eating");	
-			usleep(philosopher->data->time_to_eat * 1000);
+			philosopher->start_eat = time_now(); 
 			philosopher->time_ate++;
-			pthread_mutex_unlock(&philosopher->fork_left);
-			printf_action(philosopher, "has taken a unlocked fork_left");
-			pthread_mutex_unlock(&philosopher->fork_right);
-			printf_action(philosopher, "has taken a unlocked fork_right");
+			ft_usleep(philosopher->data->time_to_eat);
+			pthread_mutex_unlock(&philosopher[philosopher->tid - 1].fork);
+			printf_action(philosopher, "has taken a unlocked fork");
+			pthread_mutex_unlock(&philosopher[philosopher->tid % philosopher->data->nbr_philo].fork);
+			printf_action(philosopher, "has taken a unlocked fork");
 			printf_action(philosopher, "is sleeping");	
-			usleep(philosopher->data->time_to_sleep * 1000);
+			ft_usleep(philosopher->data->time_to_sleep );
 			printf_action(philosopher, "is thinking");
 			if (philosopher->data->nbr_must_eat != 0)
 			{
@@ -69,7 +67,6 @@ void	*action(void *philo)
 					philosopher->data->death = 2;
 					return(0);
 				}
-
 			}
 	}
 	return (0);
@@ -83,14 +80,15 @@ int init_philosopher(t_data *data)
 
 	while (++i < data->nbr_philo)
 	{
+		data->philosopher[i].start_eat = time_now();
+		data->philosopher[i].start = time_now();
 		data->philosopher[i].tid = i + 1;
-		pthread_mutex_init(&(data->philosopher[i].fork_right), NULL);
-		data->philosopher[i].fork_left = data->philosopher[(i + 1) % (data->nbr_philo)].fork_right;
+		pthread_mutex_init(&(data->philosopher[i].fork), NULL);
 		if (pthread_create(&data->philosopher[i].thread, NULL, action, &(data->philosopher[i]))!= 0)
 			return (-1);
-		//pthread_detach(data->philosopher[i].thread);
+		pthread_detach(data->philosopher[i].thread);
 	}
-	usleep(200);
+	
 	while (1)
 	{
 		i = 0;
@@ -101,7 +99,7 @@ int init_philosopher(t_data *data)
 			{
 				pthread_mutex_lock(&data->mx_print);
 				if (data->death != 2)
-					printf("%lld\t%d %s\n",  time_now() - (long long)data->philosopher[i].start, data->philosopher[i].tid, "died");
+					printf("%lld\t%d %s\n",  time_now() - data->philosopher[i].start, data->philosopher[i].tid, "died");
 				return(0);
 				pthread_mutex_unlock(&data->mx_print);	
 			}
@@ -112,20 +110,20 @@ int init_philosopher(t_data *data)
 	return (0);
 }
 
-void mx_destroy(t_data *data)
-{
-	int	i;
+// void mx_destroy(t_data *data)
+// {
+// 	int	i;
 
-	i = 0;
-	pthread_mutex_destroy(&data->mx_death);
-	pthread_mutex_destroy(&data->mx_print);
-	pthread_mutex_destroy(&data->mx_print);
-	while (i < data->nbr_philo)
-	{
-		pthread_mutex_destroy(&data->philosopher[i].fork_right);
-		i++;
-	}
-}
+// 	i = 0;
+// 	pthread_mutex_destroy(&data->mx_death);
+// 	pthread_mutex_destroy(&data->mx_print);
+// 	pthread_mutex_destroy(&data->mx_print);
+// 	while (i < data->nbr_philo)
+// 	{
+// 		pthread_mutex_destroy(&data->philosopher[i].fork_right);
+// 		i++;
+// 	}
+// }
 
 int main (int ac,  char **av)
 {

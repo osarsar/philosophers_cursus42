@@ -6,7 +6,7 @@
 /*   By: osarsar <osarsar@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/07 19:56:58 by osarsar           #+#    #+#             */
-/*   Updated: 2023/06/25 17:26:10 by osarsar          ###   ########.fr       */
+/*   Updated: 2023/08/25 04:50:41 by osarsar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,13 +61,13 @@ int check_error(char **av)
 	return (1);
 }
 
-void	ft_usleep(int ms)
+void	ft_usleep(long long ms)
 {
-	long int	time;
+	long long	time;
 
 	time = time_now();
-	while (time_now() - time < ms)
-		usleep(ms / 10);
+	while (time_now() <= time + ms)
+		usleep(10);
 }
 
 void merror(t_data *data)
@@ -88,6 +88,6 @@ long long	time_now(void)
 void printf_action(t_philo *philosopher, char *str)
 {
 	pthread_mutex_lock(&philosopher->data->mx_print);
-	printf("%lld\t%d %s\n",  time_now() - (long long)philosopher->start, philosopher->tid, str);
+	printf("%lld\t%d %s\n",  time_now() - philosopher->start, philosopher->tid, str);
 	pthread_mutex_unlock(&philosopher->data->mx_print);
 }

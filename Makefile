@@ -9,7 +9,7 @@ NAME = libft.a
 
 $(NAME) :  $(SRCS:.c=.o)
 	@ar -r $(NAME) $(SRCS:.c=.o)
-	@cc -Wall -Werror -Wextra $(NAME) -o philo -g -fsanitize=thread
+	@cc -Wall -Werror -Wextra $(NAME) -o philo 
 all : $(NAME)
 
 clean :

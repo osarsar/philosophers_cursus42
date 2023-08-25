@@ -6,7 +6,7 @@
 /*   By: osarsar <osarsar@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/07 19:57:56 by osarsar           #+#    #+#             */
-/*   Updated: 2023/06/26 23:51:23 by osarsar          ###   ########.fr       */
+/*   Updated: 2023/08/25 04:46:08 by osarsar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,8 @@
 
 typedef	struct s_data
 {
-	int				time_to_eat;
-	int				time_to_sleep;
+	long long		time_to_eat;
+	long long		time_to_sleep;
 	long long		time_to_die;
 	int				nbr_philo;
 	int				nbr_must_eat;
@@ -41,8 +41,7 @@ typedef struct s_philo
 {
 	int				tid;
 	pthread_t		thread;
-	pthread_mutex_t fork_left;
-	pthread_mutex_t fork_right;
+	pthread_mutex_t fork;
 	long long		start_eat;
 	long long		start;
 	int				time_ate;
@@ -65,5 +64,6 @@ void		merror(t_data *data);
 long long	time_now(void);
 void		printf_action(t_philo *philosopher, char *str);
 int			check_error(char **av);
+void		ft_usleep(long long ms);
 
 #endif
