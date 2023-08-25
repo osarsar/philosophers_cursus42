@@ -1,5 +1,7 @@
 SRCS =	philo.c	\
 		philo_utils1.c \
+		philo_utils2.c \
+		philo_utils3.c \
 
 NAME = libft.a
 
