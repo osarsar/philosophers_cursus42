@@ -6,7 +6,7 @@
 /*   By: osarsar <osarsar@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/07 19:56:58 by osarsar           #+#    #+#             */
-/*   Updated: 2023/08/25 05:00:04 by osarsar          ###   ########.fr       */
+/*   Updated: 2023/08/26 00:07:19 by osarsar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ void	merror(t_data *data)
 {
 	printf("ERROR!\n");
 	free(data);
-	exit(1);
+	return ;
 }
 
 long long	time_now(void)
