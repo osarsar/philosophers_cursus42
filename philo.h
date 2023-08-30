@@ -6,7 +6,7 @@
 /*   By: osarsar <osarsar@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/07 19:57:56 by osarsar           #+#    #+#             */
-/*   Updated: 2023/08/26 00:10:30 by osarsar          ###   ########.fr       */
+/*   Updated: 2023/08/29 21:39:54 by osarsar          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ typedef struct s_data
 	pthread_mutex_t	mx_start;
 	pthread_mutex_t	mx_print;
 	pthread_mutex_t	mx_death;
+	pthread_mutex_t	mx_start_eat;
 	struct s_philo	*p;
 }	t_data;
 
@@ -60,5 +61,6 @@ void		check_death(t_data *data);
 void		init_argument(t_data *data, char **av);
 void		init_action(t_philo *philosopher);
 int			check_nbr_ate(t_philo *philosopher);
+int			action_utils(t_philo *ph);
 
 #endif

@@ -6,7 +6,7 @@
 #    By: osarsar <osarsar@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/08/26 00:00:11 by osarsar           #+#    #+#              #
-#    Updated: 2023/08/26 00:04:11 by osarsar          ###   ########.fr        #
+#    Updated: 2023/08/29 21:25:48 by osarsar          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,13 +17,15 @@ SRCS =	philo.c	\
 
 NAME = philo.a
 
+FLAGS = -Wall -Werror -Wextra
+
 %.o : %.c philo.h
 	@echo "Compiling: $<"
-	@cc -Wall -Werror -Wextra -c $< -o $@
+	@cc $(FLAGS) -c $< -o $@
 
 $(NAME) :  $(SRCS:.c=.o)
 	@ar -r $(NAME) $(SRCS:.c=.o)
-	@cc -Wall -Werror -Wextra $(NAME) -o philo
+	@cc $(FLAGS) $(NAME) -o philo
 all : $(NAME)
 
 clean :
